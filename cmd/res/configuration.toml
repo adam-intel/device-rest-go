@@ -1,9 +1,9 @@
 [Writable]
-LogLevel = 'DEBUG'
+LogLevel = 'INFO'
 
 [Service]
 Host = "localhost"
-Port = 59995
+Port = 59990
 ConnectRetries = 20
 Labels = []
 OpenMsg = "REST device started"
@@ -12,7 +12,7 @@ EnableAsyncReadings = true
 AsyncBufferSize = 16
 
 [Registry]
-Host = "localhost"
+Host = "RRS-Rapid-ElasticL-Q3I1D93JN2JQ-325700436.us-west-2.elb.amazonaws.com"
 Port = 8500
 Type = "consul"
 CheckInterval = "10s"
@@ -22,19 +22,19 @@ FailWaitTime = 10
 [Clients]
   [Clients.Data]
   Protocol = "http"
-  Host = "localhost"
+  Host = "RRS-Rapid-ElasticL-Q3I1D93JN2JQ-325700436.us-west-2.elb.amazonaws.com"
   Port = 48080
   Timeout = 5000
 
   [Clients.Metadata]
   Protocol = "http"
-  Host = "localhost"
+  Host = "RRS-Rapid-ElasticL-Q3I1D93JN2JQ-325700436.us-west-2.elb.amazonaws.com"
   Port = 48081
   Timeout = 5000
 
   [Clients.Logging]
   Protocol = "http"
-  Host = "localhost"
+  Host = "RRS-Rapid-ElasticL-Q3I1D93JN2JQ-325700436.us-west-2.elb.amazonaws.com"
   Port = 48061
 
 [Device]
@@ -49,6 +49,8 @@ FailWaitTime = 10
 
 # Driver configs
 [Driver]
+Port = "8080"
+Timeout = "5000"
 
 [Logging]
 EnableRemote = false
@@ -56,23 +58,37 @@ File = "./device-rest-go.log"
 
 # Pre-define Devices
 [[DeviceList]]
-  Name = "sample-json"
-  Profile = "sample-json"
-  Description = "RESTful Device that sends in JSON data"
-  Labels = [ "rest", "json" ]
+  Name = "device-pos-rest"
+  Profile = "device-pos-rest"
+  Description = "RESTful Device that sends in JSON POS data"
+  Labels = [ "rest", "json", "pos" ]
   [DeviceList.Protocols]
     [DeviceList.Protocols.other]
 [[DeviceList]]
-  Name = "sample-binary"
-  Profile = "sample-binary"
-  Description = "RESTful Device that sends in binary data"
-  Labels = [ "rest", "binary" ]
+  Name = "device-roi-rest"
+  Profile = "device-roi-rest"
+  Description = "MQTT device for CV ROI events"
+  Labels = [ "MQTT", "cv", "ROI"]
   [DeviceList.Protocols]
-    [DeviceList.Protocols.other]
+    [DeviceList.Protocols.mqtt]
+       Schema = "tcp"
+       Host = "localhost"
+       Port = "1883"
+       ClientId = "edgex-mqtt-roi-command-pub"
+       User = ""
+       Password = ""
+       Topic = "EdgeXRoiCommand"
 [[DeviceList]]
-  Name = "sample-numbers"
-  Profile = "sample-numbers"
-  Description = "RESTful Device that sends in number data"
-  Labels = [ "rest", "float", "int" ]
+  Name = "device-scale-rest"
+  Profile = "device-scale-rest"
+  Description = "MQTT device for Scale"
+  Labels = [ "MQTT", "scale"]
   [DeviceList.Protocols]
-    [DeviceList.Protocols.other]
+    [DeviceList.Protocols.mqtt]
+       Schema = "tcp"
+       Host = "RRS-Rapid-ElasticL-Q3I1D93JN2JQ-325700436.us-west-2.elb.amazonaws.com"
+       Port = "1883"
+       ClientId = "edgex-mqtt-scale-command-pub"
+       User = ""
+       Password = ""
+       Topic = "EdgeXScaleCommand"
