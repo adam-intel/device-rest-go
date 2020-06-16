@@ -1,5 +1,5 @@
 [Writable]
-LogLevel = 'INFO'
+LogLevel = 'DEBUG'
 
 [Service]
 BootTimeout = 30000
